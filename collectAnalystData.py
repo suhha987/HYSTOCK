@@ -10,8 +10,9 @@ import matplotlib.pyplot as plt
 from yahoo_finance import Share
 import datetime
 import holidays
+import sys
 
-today = datetime.date(2016, 4, 18)  # starting date
+today = datetime.date(2017, 7, 1)  # starting date
 us_holidays = holidays.UnitedStates()
 numDates = 220   # number of analyst data (including weekends and holidays)
 nDaysToAnalyze = 30   # number of days to analyze since the release of analyst reports
@@ -32,8 +33,8 @@ while True:
 
         # parse html table from the web
         dateStrUrl = today.strftime('%Y/%m/%d/')
-        # url = 'https://www.briefing.com/Investor/Calendars/Upgrades-Downgrades/Upgrades/' + dateStrUrl
-        url = 'https://www.briefing.com/Investor/Calendars/Upgrades-Downgrades/Initiated/' + dateStrUrl
+        url = 'https://www.briefing.com/Investor/Calendars/Upgrades-Downgrades/Upgrades/' + dateStrUrl
+        # url = 'https://www.briefing.com/Investor/Calendars/Upgrades-Downgrades/Initiated/' + dateStrUrl
         response = requests.get(url)
         hp = htmlTableParser.HTMLTableParser()
         table = hp.parse_url(url)
@@ -72,7 +73,7 @@ while True:
             yest_date = today + datetime.timedelta(days=-1)
         next_date = today + datetime.timedelta(days=nDaysToAnalyze - 1)
 
-        sh_norm = Share('NDAQ')
+        sh_norm = Share('NVDA')
         db_norm = sh_norm.get_historical(yest_date.isoformat(), next_date.isoformat())
 
         for i in range(1, len(df.index)):
@@ -102,6 +103,7 @@ while True:
             break
     except:
         print('Error..')
+        print(sys.exc_info())
         today = today + datetime.timedelta(days=1)
         continue
 

@@ -5,7 +5,9 @@ from bs4 import BeautifulSoup
 class HTMLTableParser:
     def parse_url(self, url):
         response = requests.get(url)
-        soup = BeautifulSoup(response.text, 'lxml')
+        response.encoding = 'utf-8'
+        page = response.text
+        soup = BeautifulSoup(page, 'lxml')
         # table = soup.find('table')
         # return self.parse_html_table(table)
         return [(self.parse_html_table(table)) for table in soup.find_all('table')]
